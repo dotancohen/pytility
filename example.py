@@ -4,6 +4,8 @@
 Examples of common Python syntax and techniques
 """
 
+
+
 # IMPORTS
 
 import sys
@@ -16,16 +18,11 @@ try:
 except:
 	import simplejson as json
 
-# IMPORT FROM A SPECIFIED LOCATION
+# IMPORT FROM 'lib' DIRECTORY
+libdir = os.path.dirname(os.path.abspath(__file__)) + os.path.sep + 'lib'
+sys.path.insert(0, libdir)
 
-libs_to_import = ['', 'requests', 'requests-oauthlib']
-for lib in libs_to_import:
-	libdir = os.path.dirname(os.path.abspath(__file__)) + os.path.sep + 'lib' + os.path.sep + lib
-	sys.path.insert(0, libdir)
-
-import requests
 import file_in_lib_directory
-from requests_oauthlib import OAuth1
 
 
 
@@ -115,5 +112,3 @@ def main(args):
 
 if __name__ == '__main__':
 	main(sys.argv)
-
-	return True
