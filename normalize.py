@@ -60,6 +60,7 @@ class Normalize(object):
 		'West Virginia': [304, 681],
 		'Wisconsin': [262, 414, 608, 715, 920],
 		'Wyoming': [307],
+
 		'American Samoa': [684],
 		'Guam': [671],
 		'Puerto Rico': [787, 939],
@@ -68,6 +69,7 @@ class Normalize(object):
 
 	abbreviations = {
 		# http://en.wikipedia.org/wiki/List_of_U.S._state_abbreviations
+		# First value is the canonical USPS code for the state
 		'Alabama': ['al', 'ala '],
 		'Alaska': ['ak', 'alas'],
 		'Arizona': ['az', 'ariz'],
@@ -117,8 +119,13 @@ class Normalize(object):
 		'Virginia': ['va', 'virg'],
 		'Washington': ['wa', 'wn', 'wash'],
 		'West Virginia': ['wv', 'wva', 'w virg'],
-		'Wisconsin ': ['wi', 'ws', 'wis', 'wisc'],
-		'Wyoming ': ['wy', 'wyo']
+		'Wisconsin': ['wi', 'ws', 'wis', 'wisc'],
+		'Wyoming': ['wy', 'wyo'],
+
+		'American Samoa': ['as'],
+		'Guam': ['gu'],
+		'Puerto Rico': ['pr'],
+		'Virgin Islands': ['vi']
 	}
 
 
