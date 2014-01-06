@@ -134,6 +134,25 @@ class Normalize(object):
 		pass
 
 
+
+	def get_state_for_area_code(self, code):
+
+		if isinstance(code, str):
+			if code.isdigit():
+				code = int(code)
+			else:
+				raise TypeError("code must be an integer or numeric string")
+
+		for state,codes in self.area_codes.items():
+			if code in codes:
+				# Assumes that area codes are unique to states (i.e. no overlap)
+				# Upon checking, this assumption seems to be true
+				return state
+
+		return False
+
+
+
 	def area_code_in_state(self, state, code):
 
 		if isinstance(code, str):
@@ -165,6 +184,10 @@ def main():
 
 	assert n.area_code_in_state('Indiana', 219)==True
 	assert n.area_code_in_state('Indiana', 351)==False
+
+	assert n.get_state_for_area_code('219')=='Indiana'
+	assert n.get_state_for_area_code('542')==False
+
 	assert n.canonical_state('in')=='Indiana'
 	assert n.canonical_state('in')!='Washington'
 
