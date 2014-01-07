@@ -153,7 +153,7 @@ class Normalize(object):
 
 
 
-	def area_code_in_state(self, state, code):
+	def is_area_code_in_state(self, state, code):
 
 		if isinstance(code, str):
 			if code.isdigit():
@@ -165,7 +165,7 @@ class Normalize(object):
 
 
 
-	def canonical_state(self, abbreviation):
+	def get_canonical_state_name(self, abbreviation):
 
 		abbreviation = re.sub('[^a-z ]', '', abbreviation.lower())
 
@@ -179,7 +179,7 @@ class Normalize(object):
 
 	def get_canonical_state_abbreviation(self, state):
 
-		state = self.canonical_state(state)
+		state = self.get_canonical_state_name(state)
 
 		if state==False:
 			return False
@@ -193,14 +193,14 @@ def main():
 
 	print("Testing...")
 
-	assert n.area_code_in_state('Indiana', 219)==True
-	assert n.area_code_in_state('Indiana', 351)==False
+	assert n.is_area_code_in_state('Indiana', 219)==True
+	assert n.is_area_code_in_state('Indiana', 351)==False
 
 	assert n.get_state_for_area_code('219')=='Indiana'
 	assert n.get_state_for_area_code('542')==False
 
-	assert n.canonical_state('in')=='Indiana'
-	assert n.canonical_state('in')!='Washington'
+	assert n.get_canonical_state_name('in')=='Indiana'
+	assert n.get_canonical_state_name('in')!='Washington'
 
 	assert n.get_canonical_state_abbreviation('Indiana')=='IN'
 	assert n.get_canonical_state_abbreviation('ariz')=='AZ'
