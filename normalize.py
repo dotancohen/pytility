@@ -177,6 +177,17 @@ class Normalize(object):
 
 
 
+	def get_canonical_state_abbreviation(self, state):
+
+		state = self.canonical_state(state)
+
+		if state==False:
+			return False
+
+		return self.abbreviations[state][0].upper()
+
+
+
 def main():
 	n = Normalize()
 
@@ -190,6 +201,10 @@ def main():
 
 	assert n.canonical_state('in')=='Indiana'
 	assert n.canonical_state('in')!='Washington'
+
+	assert n.get_canonical_state_abbreviation('Indiana')=='IN'
+	assert n.get_canonical_state_abbreviation('ariz')=='AZ'
+	assert n.get_canonical_state_abbreviation('beer')==False
 
 	print("Done!")
 
