@@ -161,6 +161,8 @@ class Normalize(object):
 			else:
 				raise TypeError("code must be an integer or numeric string")
 
+		state = self.get_canonical_state_name(state)
+
 		return code in self.area_codes[state]
 
 
