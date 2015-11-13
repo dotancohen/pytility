@@ -3,11 +3,11 @@
 import requests
 
 url = 'http://github.com'
-cookie_file = '/home/user/.mozilla/firefox/f00b4r.default/cookies.sqlite'
+profile_folder = '/home/user/.mozilla/firefox/f00b4r.default'
 
 
 
-def get_cookie_jar(filename):
+def get_cookie_jar(profile_folder):
 	"""
 	Protocol implementation for handling gsocmentors.com transactions
 	Author: Noah Fontes nfontes AT cynigram DOT com
@@ -17,11 +17,14 @@ def get_cookie_jar(filename):
 	Ported to Python 3 by Dotan Cohen
 	"""
 
-	from io import StringIO
 	import http.cookiejar
+	import os
 	import sqlite3
+	from io import StringIO
+
+	sql_file = os.path.join(profile_folder, 'cookies.sqlite')
  
-	con = sqlite3.connect(filename)
+	con = sqlite3.connect(sql_file)
 	cur = con.cursor()
 	cur.execute("SELECT host, path, isSecure, expiry, name, value FROM moz_cookies")
 
@@ -37,7 +40,8 @@ def get_cookie_jar(filename):
 	for item in cur.fetchall():
 		s.write("%s\t%s\t%s\t%s\t%s\t%s\t%s\n" % (
 			item[0], ftstr[item[0].startswith('.')], item[1],
-			ftstr[item[2]], item[3], item[4], item[5]))
+			ftstr[item[2]], item[3], item[4], item[5])
+		)
 
 	s.seek(0)
 	cookie_jar = http.cookiejar.MozillaCookieJar()
@@ -47,8 +51,9 @@ def get_cookie_jar(filename):
 
 
 
-cj = get_cookie_jar(cookie_file)
+cj = get_cookie_jar(profile_folder)
 response = requests.get(url, cookies=cj)
+
 if 'Signed in as' in response.text:
 	print('Confirmed signed into Github!')
 else:
