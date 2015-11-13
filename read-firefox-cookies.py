@@ -18,11 +18,14 @@ def get_cookie_jar(profile_folder):
 	"""
 
 	import http.cookiejar
+	import json
 	import os
 	import sqlite3
+	import time
 	from io import StringIO
 
 	sql_file = os.path.join(profile_folder, 'cookies.sqlite')
+	sessions_file = os.path.join(profile_folder, 'sessionstore-backups/recovery.js')
  
 	con = sqlite3.connect(sql_file)
 	cur = con.cursor()
@@ -42,6 +45,34 @@ def get_cookie_jar(profile_folder):
 			item[0], ftstr[item[0].startswith('.')], item[1],
 			ftstr[item[2]], item[3], item[4], item[5])
 		)
+
+	sessions_input = open(sessions_file, 'r')
+	sessions_data = json.loads(sessions_input.read())
+
+	for win in sessions_data['windows']:
+		for item in win['cookies']:
+
+			# Required Keys: host, path, value, name
+			# Optional keys: httponly
+			# Missing Keys: expiry, secure
+
+			# This does not seem to be used in the output file format
+			item['httponly'] = 0
+			if 'httponly' in item and item['httponly']==True:
+				item['httponly'] = 1
+
+			# I could find no instance of this actually being used, I am only guessing that it exists
+			item['secure'] = 0
+			if 'secure' in item and item['secure']==True:
+				item['secure'] = 1
+
+			# This field is needed, even though it doesn't seem to be available in the JSON
+			item['expiry'] = int(time.time()+84600)
+
+			s.write("%s\t%s\t%s\t%s\t%s\t%s\t%s\n" % (
+				item['host'], ftstr[item['host'].startswith('.')], item['path'],
+				ftstr[item['secure']], item['expiry'], item['name'], item['value'])
+			)
 
 	s.seek(0)
 	cookie_jar = http.cookiejar.MozillaCookieJar()
