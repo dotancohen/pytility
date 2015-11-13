@@ -1,8 +1,7 @@
 #!/usr/bin/python3
 
 import requests
-
-firefox_profile_folder = '/home/user/.mozilla/firefox/f00b4r.default'
+import sys
 
 
 
@@ -15,6 +14,7 @@ def get_cookie_jar(profile_folder):
 	Maintainer: Dotan Cohen
 	* Ported to Python 3
 	* Support cookies from recovery.js
+	* Accept profile folder as input parameter instead of sqlite filename
 	"""
 
 	import http.cookiejar
@@ -27,7 +27,12 @@ def get_cookie_jar(profile_folder):
 	sql_file = os.path.join(profile_folder, 'cookies.sqlite')
 	sessions_file = os.path.join(profile_folder, 'sessionstore-backups/recovery.js')
  
-	con = sqlite3.connect(sql_file)
+	try:
+		con = sqlite3.connect(sql_file)
+	except sqlite3.OperationalError:
+		print("Cannot open cookies database.")
+		return False
+
 	cur = con.cursor()
 	cur.execute("SELECT host, path, isSecure, expiry, name, value FROM moz_cookies")
 
@@ -82,9 +87,31 @@ def get_cookie_jar(profile_folder):
 
 
 
+def get_profile_folder():
+
+	"""
+	Return the Firefox profile folder
+
+	Based upon Tim Ansell's code from here:
+	http://blog.mithis.net/archives/python/94-reading-cookies-firefox
+	"""
+
+	# TODO: Actually implement the code!
+
+	profile_folder = '/home/user/.mozilla/firefox/f00b4r.default'
+
+	return profile_folder
+
+
+
 # Test the script, see if we are logged into Github
 
+firefox_profile_folder = get_profile_folder()
 cj = get_cookie_jar(firefox_profile_folder)
+
+if cj==False:
+	sys.exit()
+
 response = requests.get('http://github.com', cookies=cj)
 
 if 'Signed in as' in response.text:
