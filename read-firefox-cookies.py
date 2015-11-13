@@ -2,19 +2,19 @@
 
 import requests
 
-url = 'http://github.com'
-profile_folder = '/home/user/.mozilla/firefox/f00b4r.default'
+firefox_profile_folder = '/home/user/.mozilla/firefox/f00b4r.default'
 
 
 
 def get_cookie_jar(profile_folder):
 	"""
-	Protocol implementation for handling gsocmentors.com transactions
-	Author: Noah Fontes nfontes AT cynigram DOT com
+	Original Author: Noah Fontes nfontes AT cynigram DOT com
+	Original URL: http://blog.mithis.net/archives/python/90-firefox3-cookies-in-python
 	License: MIT
-	Original: http://blog.mithis.net/archives/python/90-firefox3-cookies-in-python
 
-	Ported to Python 3 by Dotan Cohen
+	Maintainer: Dotan Cohen
+	* Ported to Python 3
+	* Support cookies from recovery.js
 	"""
 
 	import http.cookiejar
@@ -82,8 +82,10 @@ def get_cookie_jar(profile_folder):
 
 
 
-cj = get_cookie_jar(profile_folder)
-response = requests.get(url, cookies=cj)
+# Test the script, see if we are logged into Github
+
+cj = get_cookie_jar(firefox_profile_folder)
+response = requests.get('http://github.com', cookies=cj)
 
 if 'Signed in as' in response.text:
 	print('Confirmed signed into Github!')
