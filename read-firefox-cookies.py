@@ -49,5 +49,9 @@ def get_cookie_jar(filename):
 
 cj = get_cookie_jar(cookie_file)
 response = requests.get(url, cookies=cj)
-print(response.text)
+if 'Signed in as' in response.text:
+	print('Confirmed signed into Github!')
+else:
+	print('Cannot confirmed that you are signed into Github.')
+	print('Please ensure that you are singed into Github in Firefox before testing.')
 
