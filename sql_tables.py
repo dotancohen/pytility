@@ -1,5 +1,11 @@
 #!/usr/bin/python3
 
+"""
+Easily manipulate all tables of an SQL database
+
+Curently only supports dropping tables
+"""
+
 import sys
 
 skip = ('rows in set', 'Tables_in_', '----',)
