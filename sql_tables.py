@@ -2,14 +2,23 @@
 
 """
 Easily manipulate all tables of an SQL database
-
-Curently only supports dropping tables
 """
 
 import sys
 
 
-def main():
+def main(action):
+
+	actions = ['drop', 'truncate']
+
+	if action == None:
+		action = actions[0]
+
+	if action not in actions:
+		print("Not a legal action: " + action)
+		print("Legal actions:")
+		print(actions)
+		return False
 
 	skip = ('rows in set', 'Tables_in_', '----',)
 
@@ -21,7 +30,7 @@ def main():
 		table = i[2:-2].strip()
 		if table=='' or table.startswith(skip):
 			continue
-		print("drop table %s;" % table)
+		print("%s table %s;" % (action, table, ))
 
 	print("\nshow tables;\n")
 
@@ -29,4 +38,9 @@ def main():
 
 if __name__ == "__main__":
 
-	main();
+	action = None
+
+	if len(sys.argv)>1:
+		action = sys.argv[1]
+
+	main(action);
