@@ -9,12 +9,15 @@ import sys
 
 def main(action):
 
-	actions = ['drop', 'truncate']
+	actions = {
+		'drop': 'drop table %s;',
+		'truncate': 'truncate table %s;',
+	}
 
 	if action == None:
-		action = actions[0]
+		action = list(actions.keys())[0]
 
-	if action not in actions:
+	if action not in actions.keys():
 		print("Not a legal action: " + action)
 		print("Legal actions:")
 		print(actions)
@@ -30,7 +33,7 @@ def main(action):
 		table = i[2:-2].strip()
 		if table=='' or table.startswith(skip):
 			continue
-		print("%s table %s;" % (action, table, ))
+		print(actions[action] % (table, ))
 
 	print("\nshow tables;\n")
 
