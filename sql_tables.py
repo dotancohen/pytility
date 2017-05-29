@@ -12,7 +12,7 @@ def main(action):
 	actions = {
 		'drop': 'drop table %s;',
 		'truncate': 'truncate table %s;',
-		'showcreate': 'show create table %s;'
+		'showcreate': 'show create table %s\G'
 	}
 
 	if action == None:
